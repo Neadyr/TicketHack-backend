@@ -54,7 +54,7 @@ router.get("/cart", function (req, res, next) {
     .populate("tripCart")
     .then((data) => {
       console.log(data);
-      res.json({ result: true });
+      res.json({ result: true, cart: data.tripCart });
     });
 });
 
@@ -64,7 +64,7 @@ router.get("/booked", function (req, res, next) {
     .populate("tripBooked")
     .then((data) => {
       console.log(data);
-      res.json({ result: true });
+      res.json({ result: true, cart: data.tripBooked });
     });
 });
 
@@ -74,7 +74,7 @@ router.get("/passed", function (req, res, next) {
     .populate("tripPassed")
     .then((data) => {
       console.log(data);
-      res.json({ result: true });
+      res.json({ result: true, cart: data.tripPassed });
     });
 });
 

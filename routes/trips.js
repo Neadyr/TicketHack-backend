@@ -67,6 +67,18 @@ router.put("/cart", (req, res) => {
   });
 });
 
+router.delete("/cart", (req, res) => {
+  const { tripId, username } = req.body;
+  User.findOne({ username }).then((data) => {
+    data.tripCart = data.tripCart.filter((x) => {
+      x != tripId;
+    });
+    data.tripCart
+      .save()
+      .then(res.json({ result: true, message: "Trip deleted" }));
+  });
+});
+
 router.put("/booked", (req, res) => {
   const { username } = req.body;
   User.findOne({ username }).then((data) => {
