@@ -48,9 +48,8 @@ router.post("/login", function (req, res) {
   );
 });
 
-router.get("/cart", function (req, res, next) {
-  const { username } = req.body;
-  User.findOne({ username: username })
+router.get("/cart/:username", function (req, res, next) {
+  User.findOne({ username: req.params.username })
     .populate("tripCart")
     .then((data) => {
       console.log(data);
