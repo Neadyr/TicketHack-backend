@@ -91,11 +91,22 @@ router.delete("/cart", (req, res) => {
 
 router.put("/booked", (req, res) => {
   const { username } = req.body;
-  User.findOne({ username }).then((data) => {
-    data.tripBooked = data.tripCart;
-    data.tripCart = [];
-    data.save().then(res.json({ result: true, message: "Trip(s) booked" }));
-  });
+  let array1 = [];
+  let array2 = [];
+  User.findOne({ username: username })
+    .then((data) => {
+      array1 = data.tripCart;
+      data.tripCart = [];
+      data.save();
+      console.log(data.tripCart);
+    })
+    .then(() =>
+      User.findOne({ username }).then((data) => {
+        array2 = array1.concat(data.tripBooked);
+        data.tripBooked = array2;
+        data.save().then(res.json({ result: true, message: "Trip(s) booked" }));
+      })
+    );
 });
 
 router.put("/passed", (req, res) => {
