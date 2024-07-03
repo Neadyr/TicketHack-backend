@@ -72,6 +72,7 @@ router.put("/cart", (req, res) => {
 
 router.delete("/cart", (req, res) => {
   const { tripId, username } = req.body;
+  console.log(tripId);
   User.updateOne({ username: username }, { $pull: { tripCart: tripId } }).then(
     (data) => {
       console.log(data);
