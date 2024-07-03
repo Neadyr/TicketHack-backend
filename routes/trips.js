@@ -56,11 +56,10 @@ router.put("/cart", (req, res) => {
   const { tripId, username } = req.body;
   Trip.findOne({ _id: tripId }).then((data) => {
     if (data) {
-      User.updateOne({ username: username }, { tripCart: tripId }).then(
-        (data) => {
-          res.json({ result: true });
-        }
-      );
+      User.findOne({ username: username }).then((data) => {
+        data.tripCart.push(tripId);
+        data.save().then(res.json({ result: true, cart: data }));
+      });
     } else {
       res.json({ result: false, error: "No trip found" });
     }
