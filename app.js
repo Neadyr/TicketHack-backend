@@ -9,7 +9,12 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 
 const cors = require("cors");
-
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Authorization');
+  next();
+});
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var tripsRouter = require("./routes/trips");
