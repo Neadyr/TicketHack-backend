@@ -58,7 +58,11 @@ router.put("/cart", (req, res) => {
     if (data) {
       User.findOne({ username: username }).then((data) => {
         data.tripCart.push(tripId);
-        data.save().then(res.json({ result: true, cart: data }));
+        data.save().then(() => {
+          User.findOne({ username: username })
+            .populate("tripCart")
+            .then((data) => res.json({ result: true, cart: data }));
+        });
       });
     } else {
       res.json({ result: false, error: "No trip found" });
@@ -68,14 +72,20 @@ router.put("/cart", (req, res) => {
 
 router.delete("/cart", (req, res) => {
   const { tripId, username } = req.body;
-  User.findOne({ username }).then((data) => {
-    data.tripCart = data.tripCart.filter((x) => {
-      x != tripId;
-    });
-    data.tripCart
-      .save()
-      .then(res.json({ result: true, message: "Trip deleted" }));
-  });
+  User.updateOne({ username: username }, { $pull: { tripCart: tripId } }).then(
+    (data) => {
+      console.log(data);
+      if (data.modifiedCount == 1) {
+        res.json({ result: true, message: "Trip deleted" });
+      } else {
+        res.json({ result: false, message: "Trip not found" });
+      }
+    }
+    // .then((data) => console.log(data))
+    // data.tripCart
+    //   .save()
+    // .then(res.json({ result: true, message: "Trip deleted" }));
+  );
 });
 
 router.put("/booked", (req, res) => {
